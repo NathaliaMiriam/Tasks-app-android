@@ -7,9 +7,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * Retrofit -> simplifica as chamadas à API
  *
- * Faz conexão com a interface do usuário -> PersonService
+ * Faz conexão com as infos do usuário -> PersonService
  *
- * Utilizei como base a DevMasterTeam
+ * Utiliza como base a DevMasterTeam
+ *
+ * Faz conexão com o repositório -> PersonRepository
  */
 
 class RetrofitClient private constructor() {
@@ -35,6 +37,10 @@ class RetrofitClient private constructor() {
             return INSTANCE // retorna a instancia
         }
 
+        // retorna um serviço, a instancia de qualquer serviço -> de PersonService ...
+        fun <T> getService(serviceClass: Class<T>): T { // tipo <T> é para códigos genéricos...
+            return getRetrofitInstance().create(serviceClass) // ou seja, aqui posso retornar qualquer tipo de serviço
+        }
     }
 
 }

@@ -7,7 +7,9 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 /**
- * Informações do usuário
+ * Serviço de informações do usuário que usa o Retrofit
+ *
+ * 4) Daqui retorna a PersonModel
  *
  * Faz conexão com o Retrofit -> RetrofitClient
  *
@@ -24,7 +26,7 @@ interface PersonService {
     @POST("Authentication/Login") // a url 'Authentication/Login' é concatenada c a url base quando o Retrofit estiver fazendo a chamada
     @FormUrlEncoded // para enviar as infos do corpo (e-mail e senha)
 
-    // o @Field sinaliza p o Retrofit as infos q serão enviadas - o Call ajuda no tipo do retorno que é a classe PersonModel
+    // o @Field sinaliza p o Retrofit as infos q serão enviadas - o Call ajuda a fazer uma chamada p o Retrofit - PersonModel é o retorno
     fun login(@Field("email") email: String,
               @Field("password") password: String): Call<PersonModel>
 
@@ -34,7 +36,7 @@ interface PersonService {
     @POST("Authentication/Create") // a url 'Authentication/Login' é concatenada c a url base quando o Retrofit estiver fazendo a chamada
     @FormUrlEncoded // para enviar as infos do corpo (nome, e-mail e senha)
 
-    // o @Field sinaliza p o Retrofit as infos q serão enviadas - o Call ajuda no tipo do retorno que é a classe PersonModel
+    // o @Field sinaliza p o Retrofit as infos q serão enviadas - o Call ajuda a fazer uma chamada p o Retrofit - PersonModel é o retorno
     fun create(@Field("name") name: String,
                @Field("email") email: String,
                @Field("password") password: String): Call<PersonModel>
