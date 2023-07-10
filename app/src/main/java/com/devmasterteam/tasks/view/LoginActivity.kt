@@ -36,6 +36,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonLogin.setOnClickListener(this)
         binding.textRegister.setOnClickListener(this)
 
+        // Verifica se os dados do usuário estão preenchidos, ou seja, se o usuário está logado
+        viewModel.verifyLoggedUser()
+
         // Observadores
         observe()
     }
@@ -47,8 +50,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    // observa a val login da LoginViewModel, para saber a resposta do login (sucesso ou erro)
+
     private fun observe() {
+        // observa a val login da LoginViewModel para saber a resposta do login (sucesso ou erro)
         viewModel.login.observe(this) {
             // se der sucesso, se o status de login for positivo, faz a navegação/login
             if (it.status()) {
@@ -57,6 +61,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 // senão, mostra a mensagem de erro
             } else {
                 Toast.makeText(applicationContext, it.message(), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // observa a val loggedUser da LoginViewModel para saber se o usuário está logado ou não
+        viewModel.loggedUser.observe(this) {
+            if (it) {
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+                finish() // encerra a Activity
             }
         }
     }

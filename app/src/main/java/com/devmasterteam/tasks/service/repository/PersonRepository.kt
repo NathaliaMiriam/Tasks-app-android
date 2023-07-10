@@ -15,6 +15,8 @@ import retrofit2.Response
 /**
  * Orquestra as chamadas para o banco de dados ou API, neste caso, API
  *
+ * Para eu conseguir instanciar é necessário um contexto
+ *
  * 3) Chama a PersonService (serviço de informações do usuário que usa o Retrofit)
  *
  * Se conecta com a viewmodel -> LoginViewModel
