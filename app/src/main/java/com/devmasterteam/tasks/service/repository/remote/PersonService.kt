@@ -23,6 +23,7 @@ interface PersonService {
 
     // usuário logado:
 
+    // O 'POST' faz a postagem
     @POST("Authentication/Login") // a url 'Authentication/Login' é concatenada c a url base quando o Retrofit estiver fazendo a chamada
     @FormUrlEncoded // para enviar as infos do corpo (e-mail e senha)
 

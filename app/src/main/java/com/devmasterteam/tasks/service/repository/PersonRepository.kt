@@ -13,9 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
- * Orquestra as chamadas para o banco de dados ou API, neste caso, API
- *
- * Para eu conseguir instanciar é necessário um contexto
+ * Repositório que orquestra as chamadas para o banco de dados ou API, neste caso, API
  *
  * 3) Chama a PersonService (serviço de informações do usuário que usa o Retrofit)
  *
@@ -28,7 +26,8 @@ import retrofit2.Response
  * Se conecta com a APIListener (que ouve a resposta da API no momento do login do usuário)
  */
 
-class PersonRepository(val context: Context) { // com o contexto inserido eu consigo lá embaixo chamar a minha string...
+class PersonRepository(val context: Context) { // para eu conseguir instanciar é necessário um contexto...
+                                               // com o contexto inserido eu consigo lá embaixo chamar a minha string...
 
     // chama/acessa o serviço (PersonService) através do Retrofit
     private val remote = RetrofitClient.getService(PersonService::class.java)
@@ -36,7 +35,7 @@ class PersonRepository(val context: Context) { // com o contexto inserido eu con
     // faz chamada à API - recebe da viewmodel as infos de login do usuário e o retorno da APIListener
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
         val call = remote.login(email, password)
-        // 'enqueue' coloca a chamada 'remote' na fila - 'callback' chama um trecho de código depois que algo é executado - 'PersonModel' é o que retorna
+        // 'enqueue' coloca a chamada 'remote' na fila - 'Callback' chama um trecho de código depois que algo é executado - 'PersonModel' é o que retorna
         call.enqueue(object : Callback<PersonModel>{
 
             // faz o tratamento das chamadas de login com e-mail e senha criados no postman:
@@ -50,7 +49,7 @@ class PersonRepository(val context: Context) { // com o contexto inserido eu con
                     listener.onFailure(failResponse(response.errorBody()!!.string())) // recebe o json convertido da fun failResponse
                 }
             }
-            // 2) erro - de comunicação, não tratado, no carater de exceção ...
+            // 2) falha - de comunicação, não tratada, no carater de exceção ...
             override fun onFailure(call: Call<PersonModel>, t: Throwable) {
                 // código p retornar o erro - mensagem de erro p o usuário
                 listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED)) // puxa a string (mensagem) do arq de strings
