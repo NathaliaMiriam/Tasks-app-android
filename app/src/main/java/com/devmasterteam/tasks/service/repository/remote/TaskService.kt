@@ -30,25 +30,25 @@ interface TaskService {
 
     // 3 métodos de listagem de tarefas de acordo com a DevMasterTeam:
 
-    // Lista todas as tarefas sem filtro
+    // lista todas as tarefas sem filtro
     @GET("Task") // url que chama a função
     fun list(): Call<List<TaskModel>>
 
-    // Lista todas as tarefas dentro de período de sete dias
+    // lista todas as tarefas dentro de período de sete dias
     @GET("Next7Days") // url que chama a função
     fun listNext(): Call<List<TaskModel>>
 
-    // Lista todas as tarefas expiradas
+    // lista todas as tarefas expiradas
     @GET("Overdue") // url que chama a função
     fun listOverdue(): Call<List<TaskModel>>
 
 
-    // Carrega apenas 1 tarefa de acordo com o seu id
+    // carrega apenas 1 tarefa de acordo com o seu id
     @GET("Task/{id}") // url que chama a função + o valor que recebe por parametro (id) ... concatenação
     fun load(@Path(value = "id", encoded = true) id: Int): Call<TaskModel>
 
 
-    // Envia a tarefa
+    // envia a tarefa
     @POST("Task") // url que chama a função
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun create(
@@ -60,7 +60,7 @@ interface TaskService {
     ): Call<Boolean> // retorna um Booleano
 
 
-    // Atualiza a tarefa
+    // atualiza a tarefa
     @PUT("Task") // url que chama a função
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun update(
@@ -73,19 +73,19 @@ interface TaskService {
     ): Call<Boolean> // retorna um Booleano
 
 
-    // Marca a tarefa como completa
+    // marca a tarefa como completa
     @PUT("Task/Complete") // url que chama a função
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun complete(@Field("Id") id: Int): Call<Boolean>
 
 
-    // Marca a tarefa como incompleta
+    // marca a tarefa como incompleta
     @PUT("Task/Undo") // url que chama a função
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun undo(@Field("Id") id: Int): Call<Boolean>
 
 
-    // Deleta a tarefa
+    // deleta a tarefa
     @DELETE("Task") // url que chama a função
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun delete(@Field("Id") id: Int): Call<Boolean>

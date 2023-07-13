@@ -25,21 +25,21 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Variáveis da classe
+        // variáveis da classe
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         binding = ActivityLoginBinding.inflate(layoutInflater)
 
-        // Layout
+        // layout
         setContentView(binding.root)
 
-        // Eventos
+        // eventos
         binding.buttonLogin.setOnClickListener(this)
         binding.textRegister.setOnClickListener(this)
 
-        // Verifica se os dados do usuário estão preenchidos, ou seja, se o usuário está logado
+        // verifica se os dados do usuário estão preenchidos, ou seja, se o usuário está logado
         viewModel.verifyLoggedUser()
 
-        // Observadores
+        // observadores
         observe()
     }
 

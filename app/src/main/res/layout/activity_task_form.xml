@@ -34,6 +34,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_description" />
 
+    <!-- O componente spinner é um campo para digitação de valores (geralmente números ou datas) que possui
+    dois botões de controle, os quais permitem aumentar ou reduzir o valor do input -->
     <Spinner
         android:id="@+id/spinner_priority"
         android:layout_width="0dp"

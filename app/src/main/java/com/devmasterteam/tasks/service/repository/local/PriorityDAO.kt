@@ -14,10 +14,12 @@ import com.devmasterteam.tasks.service.model.PriorityModel
 @Dao
 interface PriorityDAO {
 
-    @Insert // insere no banco de dados ... pega a lista de prioridade e insere de acordo com o mapeamento feito na PriorityModel
+    // insere no banco de dados ... pega a lista de prioridade e insere de acordo com o mapeamento feito na PriorityModel
+    @Insert
     fun save(list: List<PriorityModel>)
 
-    @Query("SELECT * FROM Priority") // seleciona todas as colunas da tabela de prioridades
+    // seleciona todas as colunas da tabela de prioridades
+    @Query("SELECT * FROM Priority")
     fun list(): List<PriorityModel>
 
     // deleta as coisas da lista de prioridades

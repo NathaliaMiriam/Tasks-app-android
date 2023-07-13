@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(applicationContext, TaskFormActivity::class.java))
         }
 
-        // Navegação
+        // navegação
         setupNavigation()
 
-        // Observadores
+        // observadores
         observe()
     }
 

@@ -20,7 +20,7 @@ import retrofit2.Response
  *
  */
 
-class PriorityRepository(val context: Context) {
+class PriorityRepository(val context: Context) { // para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui...
 
     // chama/acessa o serviço (PriorityService) através do Retrofit
     private val remote = RetrofitClient.getService(PriorityService::class.java)
@@ -29,8 +29,9 @@ class PriorityRepository(val context: Context) {
     private val database = TaskDatabase.getDatabase(context).priorityDAO()
 
 
-    // o listener é chamado p fazer o caminho de volta ... Ida : LoginViewModel -> PriorityRepository | Volta: PriorityRepository -> LoginViewModel
+    // retorna da API a lista de prioridades - informo por parametro que existe o listener
     fun list(listener: APIListener<List<PriorityModel>>) {
+        // o listener é chamado p fazer o caminho de volta ... Ida : LoginViewModel -> PriorityRepository | Volta: PriorityRepository -> LoginViewModel
         val call = remote.list()
         // 'enqueue' coloca a chamada 'remote' na fila - 'Callback' chama um trecho de código depois que algo é executado - 'PriorityModel' é o que retorna
         call.enqueue(object : Callback<List<PriorityModel>>{ // <List<PriorityModel>> -> lista de prioridades
@@ -56,6 +57,11 @@ class PriorityRepository(val context: Context) {
             }
 
         })
+    }
+
+    // retorna do banco de dados a lista de prioridades - não preciso informar nada por parametro
+    fun list(): List<PriorityModel> {
+        return database.list()
     }
 
     // salva a lista de prioridades no banco de dados

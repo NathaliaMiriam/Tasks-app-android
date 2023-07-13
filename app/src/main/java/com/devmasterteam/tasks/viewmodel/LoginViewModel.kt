@@ -26,18 +26,17 @@ import com.devmasterteam.tasks.service.repository.remote.RetrofitClient
  *
  * download de prioridades -> obtenção da API -> retorno dos dados
  *
- *
  */
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    // passa o contexto p o repositório, visto que, lá foi inserido um contexto, e aqui eu consigo acessar o que tem lá
+    // instancia o repositório, visto que, lá foi inserido um contexto, e aqui eu consigo acessar o que tem lá
     private val personRepository = PersonRepository(application.applicationContext)
 
-    // passa o contexto p o repositório de prioridades, visto que, lá foi inserido um contexto, e aqui eu consigo acessar o que tem lá
+    // instancia o repositório de prioridades, visto que, lá foi inserido um contexto, e aqui eu consigo acessar o que tem lá
     private val priorityRepository = PriorityRepository(application.applicationContext)
 
-    // passa o contexto p a SharedPreferences, visto que, lá foi inserido um contexto, e aqui eu consigo acessar o que tem lá
+    // instancia a SharedPreferences, visto que, lá foi inserido um contexto, e aqui eu consigo acessar o que tem lá
     private val securityPreferences = SecurityPreferences(application.applicationContext)
 
 
@@ -50,8 +49,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     val loggedUser: LiveData<Boolean> = _loggedUser
 
 
-
-     // Faz login usando API
+     // faz login usando API
     fun doLogin(email: String, password: String) {
         personRepository.login(email, password, object : APIListener<PersonModel> { // passa as infos de login do usuário p o repositório
 
@@ -78,7 +76,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    // Verifica se o usuário está logado e transfere p a LoginActivity- 'get' é a fun da SecurityPreferences que pega dados
+    // verifica se o usuário está logado e transfere p a LoginActivity- 'get' é a fun da SecurityPreferences que pega dados
     fun verifyLoggedUser() {
         val token = securityPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
         val person = securityPreferences.get(TaskConstants.SHARED.PERSON_KEY)
