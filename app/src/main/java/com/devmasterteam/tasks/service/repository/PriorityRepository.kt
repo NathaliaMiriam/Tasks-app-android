@@ -22,7 +22,7 @@ import retrofit2.Response
 
 class PriorityRepository(val context: Context) {
 
-    // chama/acessa o serviço (PriorityService) através do Retrofit - API
+    // chama/acessa o serviço (PriorityService) através do Retrofit
     private val remote = RetrofitClient.getService(PriorityService::class.java)
 
     // chama/acessa o banco de dados | camada DAO
@@ -57,7 +57,6 @@ class PriorityRepository(val context: Context) {
 
         })
     }
-
 
     // salva a lista de prioridades no banco de dados
     fun save(list: List<PriorityModel>) {

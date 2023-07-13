@@ -1,5 +1,6 @@
 package com.devmasterteam.tasks.view
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -25,8 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        // 'fab' -> floating action button - ao clicar no botão acontece a navegação de uma activity p a outra -> 'TaskFormActivity' é p onde quero ir
         binding.appBarMain.fab.setOnClickListener {
-            TODO()
+            startActivity(Intent(applicationContext, TaskFormActivity::class.java))
         }
 
         // Navegação

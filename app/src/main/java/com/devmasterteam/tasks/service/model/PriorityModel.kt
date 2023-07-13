@@ -6,10 +6,9 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 /**
- * Faz a mapeação dos dados que chegam da API
+ * Mapeia os dados que chegam da API e diz como os dados serão salvos no banco de dados
  *
- * Diz como os dados serão salvos no banco de dados
- *
+ * Utiliza como base a DevMasterTeam
  */
 
 @Entity(tableName = "Priority") // ref. o salvamento no banco de dados com o nome Priority

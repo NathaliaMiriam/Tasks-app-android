@@ -70,6 +70,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/check_complete" />
 
+    <!-- Ao clicar no botão é aberto o 'DatePickerDialog' (uma pequena tela que abre uma caixa de diálogo
+    permitindo que o usuário selecione uma data c/ 'dd-mm-aaaa' através de um calendário) -->
     <Button
         android:id="@+id/button_date"
         android:layout_width="0dp"
@@ -77,6 +79,7 @@
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:gravity="center_vertical"
+        android:textColor="@color/black"
         android:hint="@string/clique_para_selecionar_a_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
