@@ -35,11 +35,11 @@ interface TaskService {
     fun list(): Call<List<TaskModel>>
 
     // lista todas as tarefas dentro de período de sete dias
-    @GET("Next7Days") // url que chama a função
+    @GET("Task/Next7Days") // url que chama a função
     fun listNext(): Call<List<TaskModel>>
 
     // lista todas as tarefas expiradas
-    @GET("Overdue") // url que chama a função
+    @GET("Task/Overdue") // url que chama a função
     fun listOverdue(): Call<List<TaskModel>>
 
 
