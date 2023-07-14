@@ -40,7 +40,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val securityPreferences = SecurityPreferences(application.applicationContext)
 
 
-    // var observada pela LoginActivity na fun observe() - ValidationModel é a classe que agrupa e atribui os status de login
+    // var observada pela LoginActivity na fun observe() - 'ValidationModel' é a classe que agrupa e atribui os status de login
     private val _login = MutableLiveData<ValidationModel>()
     val login: LiveData<ValidationModel> = _login
 
@@ -64,7 +64,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 // add os headers no RetrofitClient
                 RetrofitClient.addHeaders(result.token, result.personKey)
 
-                // se for sucesso instancia a ValidationModel
+                // se for sucesso instancia a ValidationModel vazia
                 _login.value = ValidationModel()
             }
 
@@ -76,7 +76,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    // verifica se o usuário está logado e transfere p a LoginActivity- 'get' é a fun da SecurityPreferences que pega dados
+    // verifica se o usuário está logado e transfere p a LoginActivity - 'get' é a fun da SecurityPreferences que pega dados
     fun verifyLoggedUser() {
         val token = securityPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
         val person = securityPreferences.get(TaskConstants.SHARED.PERSON_KEY)

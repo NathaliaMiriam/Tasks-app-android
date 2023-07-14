@@ -20,7 +20,8 @@ import retrofit2.Response
  *
  */
 
-class PriorityRepository(val context: Context) { // para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui...
+// para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui - Recebe a herança de BaseRepository
+class PriorityRepository(val context: Context): BaseRepository() {
 
     // chama/acessa o serviço (PriorityService) através do Retrofit
     private val remote = RetrofitClient.getService(PriorityService::class.java)
@@ -41,13 +42,7 @@ class PriorityRepository(val context: Context) { // para eu conseguir instanciar
                 call: Call<List<PriorityModel>>,
                 response: Response<List<PriorityModel>>
             ) {
-                // código p retornar o sucesso - 'TaskConstants.HTTP.SUCCESS' traz o 200 salvo lá na constante TaskConstants
-                if (response.code() == TaskConstants.HTTP.SUCCESS) {
-                    response.body()?.let { listener.onSuccess(it) }
-
-                } else {
-                    listener.onFailure(failResponse(response.errorBody()!!.string())) // recebe o json convertido da fun failResponse
-                }
+                handleResponse(response, listener) // fun na BaseRepository
             }
 
             // resposta com falha
@@ -68,11 +63,6 @@ class PriorityRepository(val context: Context) { // para eu conseguir instanciar
     fun save(list: List<PriorityModel>) {
         database.clear() // 1º limpa a lista para inserir c tudo atualizado
         database.save(list)
-    }
-
-    // converte o json recebido c a biblioteca gson ... Toda API converte o json
-    private fun failResponse(str: String): String {
-        return Gson().fromJson(str, String::class.java)
     }
 
 }

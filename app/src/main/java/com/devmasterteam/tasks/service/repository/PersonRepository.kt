@@ -26,8 +26,8 @@ import retrofit2.Response
  * Se conecta com a APIListener (que ouve a resposta da API no momento do login do usuário)
  */
 
-class PersonRepository(val context: Context) { // para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui...
-                                               // com o contexto inserido eu consigo lá embaixo chamar a minha string...
+// para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui - Recebe a herança de BaseRepository
+class PersonRepository(val context: Context): BaseRepository() {
 
     // chama/acessa o serviço (PersonService) através do Retrofit
     private val remote = RetrofitClient.getService(PersonService::class.java)
@@ -42,12 +42,7 @@ class PersonRepository(val context: Context) { // para eu conseguir instanciar l
 
             // 1) sucesso - a chamada foi e voltou - contudo, é preciso ver o que tem dentro da chamada (pode ser 200 ou 500 ...) ou seja, nem sempre volta com algo positivo
             override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                // código p retornar o sucesso - 'TaskConstants.HTTP.SUCCESS' traz o 200 salvo lá na constante TaskConstants
-                if (response.code() == TaskConstants.HTTP.SUCCESS) {
-                    response.body()?.let { listener.onSuccess(it) }
-                } else {
-                    listener.onFailure(failResponse(response.errorBody()!!.string())) // recebe o json convertido da fun failResponse
-                }
+                handleResponse(response, listener) // fun na BaseRepository
             }
             // 2) falha - de comunicação, não tratada, no carater de exceção ...
             override fun onFailure(call: Call<PersonModel>, t: Throwable) {
@@ -56,10 +51,5 @@ class PersonRepository(val context: Context) { // para eu conseguir instanciar l
             }
 
         })
-    }
-
-    // converte o json recebido c a biblioteca gson ... Toda API converte o json
-    private fun failResponse(str: String): String {
-        return Gson().fromJson(str, String::class.java)
     }
 }

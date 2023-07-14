@@ -15,6 +15,7 @@ class TaskModel {
     @SerializedName("Id") // referencia o mapeamento -> do "Id" para o "id" ... E assim funciona tbm p os demais abaixo
     var id: Int = 0
 
+    // lista de prioridades
     @SerializedName("PriorityId")
     var priorityId: Int = 0
 
