@@ -1,7 +1,7 @@
 package com.devmasterteam.tasks.service.listener
 
 /**
- * Eventos para a listagem de tarefas
+ * Eventos possíveis para cada tarefa
  */
 
 interface TaskListener {

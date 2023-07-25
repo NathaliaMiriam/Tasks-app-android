@@ -7,22 +7,26 @@ import com.devmasterteam.tasks.databinding.RowTaskListBinding
 import com.devmasterteam.tasks.service.listener.TaskListener
 import com.devmasterteam.tasks.service.model.TaskModel
 
+/**
+ * ViewHolder - wrapper (embrulho) em torno da View que contém o layout de um item individual na lista
+ *
+ * Se conecta com o Adapter (TaskAdapter)
+ */
+
 class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: TaskListener) :
     RecyclerView.ViewHolder(itemBinding.root) {
 
-    /**
-     * Atribui valores aos elementos de interface e também eventos
-     */
     fun bindData(task: TaskModel) {
 
-        itemBinding.textDescription.text = ""
-        itemBinding.textPriority.text = ""
-        itemBinding.textDueDate.text = ""
+        itemBinding.textDescription.text = task.description // descrição da tarefa
+        itemBinding.textPriority.text = task.priorityId.toString()  // prioridade da tarefa
+        itemBinding.textDueDate.text = task.dueDate // data limite da tarefa
 
         // Eventos
-        // itemBinding.textDescription.setOnClickListener { listener.onListClick(task.id) }
-        // itemBinding.imageTask.setOnClickListener { }
+        // itemBinding.textDescription.setOnClickListener { listener.onListClick(task.id) } // clique na descrição
+        // itemBinding.imageTask.setOnClickListener { } // clique na imagem
 
+        // 'setOnLongClickListener' clique longo na descrição
         itemBinding.textDescription.setOnLongClickListener {
             AlertDialog.Builder(itemView.context)
                 .setTitle(R.string.remocao_de_tarefa)
