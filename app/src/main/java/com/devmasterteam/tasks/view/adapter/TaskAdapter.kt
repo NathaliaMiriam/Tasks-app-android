@@ -21,25 +21,7 @@ class TaskAdapter : RecyclerView.Adapter<TaskViewHolder>() {
 
     private var listTasks: List<TaskModel> = arrayListOf() // lista de tarefas começa vazia
 
-    // instância do listener p q ele deixe de ser nulo e as infos sejam listadas na RecyclerView
-    private var listener: TaskListener = object : TaskListener {
-        override fun onListClick(id: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onDeleteClick(id: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onCompleteClick(id: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onUndoClick(id: Int) {
-            TODO("Not yet implemented")
-        }
-
-    }
+    private lateinit var listener: TaskListener
 
     // cria o ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {

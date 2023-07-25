@@ -2,28 +2,24 @@ package com.devmasterteam.tasks.service.listener
 
 /**
  * Eventos possíveis para cada tarefa
+ *
+ * Se conecta com o Adapter -> TaskAdapter
+ *
+ * Se conecta com a TaskViewHolder
  */
 
 interface TaskListener {
 
-    /**
-     * Click para edição
-     */
+    // click para edição
     fun onListClick(id: Int)
 
-    /**
-     * Remoção
-     */
+    // remoção
     fun onDeleteClick(id: Int)
 
-    /**
-     * Completa tarefa
-     */
+    // completa tarefa
     fun onCompleteClick(id: Int)
 
-    /**
-     * Descompleta tarefa
-     */
+    // descompleta tarefa
     fun onUndoClick(id: Int)
 
 }

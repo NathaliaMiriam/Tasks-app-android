@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devmasterteam.tasks.databinding.FragmentAllTasksBinding
+import com.devmasterteam.tasks.service.listener.TaskListener
 import com.devmasterteam.tasks.view.adapter.TaskAdapter
 import com.devmasterteam.tasks.viewmodel.TaskListViewModel
 
@@ -18,6 +19,8 @@ import com.devmasterteam.tasks.viewmodel.TaskListViewModel
  * Fragment que lista todas as tarefas
  *
  * RecyclerView passos: identificar o elemento | layout p a RecyclerView | Adapter
+ *
+ * Se conecta com a TaskListener (eventos possíveis para cada tarefa)
  */
 
 class AllTasksFragment : Fragment() {
@@ -38,13 +41,40 @@ class AllTasksFragment : Fragment() {
         binding.recyclerAllTasks.layoutManager = LinearLayoutManager(context) // identifica a RecyclerView - 'layoutManager' gerencia o layout
         binding.recyclerAllTasks.adapter = adapter // recebe a instancia do Adapter
 
-        // chama a lista de todas as tarefas
-        viewModel.list()
+        // instância do listener p q ele deixe de ser nulo lá no Adapter e as infos sejam listadas na RecyclerView
+        val listener = object : TaskListener {
+            override fun onListClick(id: Int) {
+
+            }
+
+            override fun onDeleteClick(id: Int) {
+
+            }
+
+            override fun onCompleteClick(id: Int) {
+
+            }
+
+            override fun onUndoClick(id: Int) {
+
+            }
+
+        }
+
+        // passa o listener para o Adapter
+        adapter.attachListener(listener)
+
 
         // observadores
         observe()
 
         return binding.root
+    }
+
+    // carrega o Fragment adequadamente após a inserção/edição de uma tarefa
+    override fun onResume() {
+        super.onResume()
+        viewModel.list() // chama a lista de tarefas atualizada
     }
 
     override fun onDestroyView() {
