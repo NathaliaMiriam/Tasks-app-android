@@ -29,4 +29,7 @@ class TaskModel {
     // indica se a tarefa está completa ou não, o 'false' é só pra ter um valor padrão
     @SerializedName("Complete")
     var complete: Boolean = false
+
+    // para a descrição da prioridade
+    var priorityDescription: String = ""
 }

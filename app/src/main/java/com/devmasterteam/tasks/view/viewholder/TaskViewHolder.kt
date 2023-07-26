@@ -6,6 +6,7 @@ import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.RowTaskListBinding
 import com.devmasterteam.tasks.service.listener.TaskListener
 import com.devmasterteam.tasks.service.model.TaskModel
+import com.devmasterteam.tasks.service.repository.PriorityRepository
 import java.text.SimpleDateFormat
 
 /**
@@ -19,11 +20,13 @@ import java.text.SimpleDateFormat
 class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: TaskListener) :
     RecyclerView.ViewHolder(itemBinding.root) {
 
+
+    // preenche as linhas da RecyclerView, cada linha é uma tarefa
     fun bindData(task: TaskModel) {
 
         itemBinding.textDescription.text = task.description // descrição da tarefa
 
-        itemBinding.textPriority.text = task.priorityId.toString()  // prioridade da tarefa
+        itemBinding.textPriority.text = task.priorityDescription // descrição da prioridade vêm do modelo - 'priorityDescription' é a fun -> TaskModel
 
         // data limite da tarefa - 'SimpleDateFormat()' formata a data
         val date = SimpleDateFormat("yyyy-MM-dd").parse(task.dueDate) // converte a data que vêm inicialmente p o objeto 'date'
