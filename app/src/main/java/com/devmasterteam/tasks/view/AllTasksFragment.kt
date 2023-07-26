@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +21,6 @@ import com.devmasterteam.tasks.viewmodel.TaskListViewModel
  *
  * RecyclerView passos: identificar o elemento | layout p a RecyclerView | Adapter
  *
- * Se conecta com a TaskListener (eventos possíveis para cada tarefa)
  */
 
 class AllTasksFragment : Fragment() {
@@ -41,13 +41,15 @@ class AllTasksFragment : Fragment() {
         binding.recyclerAllTasks.layoutManager = LinearLayoutManager(context) // identifica a RecyclerView - 'layoutManager' gerencia o layout
         binding.recyclerAllTasks.adapter = adapter // recebe a instancia do Adapter
 
-        // instância do listener p q ele deixe de ser nulo lá no Adapter e as infos sejam listadas na RecyclerView
+        // faz a instancia do TaskListener - implementa os métodos de eventos das tarefas
         val listener = object : TaskListener {
             override fun onListClick(id: Int) {
 
             }
 
+            // remove uma tarefa de acordo c o seu id
             override fun onDeleteClick(id: Int) {
+                viewModel.delete(id) // delete() -> TaskService -> TaskListViewModel -> TaskRepository
 
             }
 
@@ -61,7 +63,7 @@ class AllTasksFragment : Fragment() {
 
         }
 
-        // passa o listener para o Adapter
+        // passa o listener para o Adapter - p q ele deixe de ser nulo lá no Adapter e as infos sejam listadas na RecyclerView
         adapter.attachListener(listener)
 
 
@@ -87,6 +89,15 @@ class AllTasksFragment : Fragment() {
         viewModel.tasks.observe(viewLifecycleOwner) {
             adapter.updateTasks(it) // passa a lista de todas as tarefas p o Adapter, pois ele faz a cola do layout e os dados -> TaskAdapter
         }
+
+        // observa a var 'delete' da TaskListViewModel - 'viewLifecycleOwner' e não 'this', pois aq é uma fragment
+        viewModel.delete.observe(viewLifecycleOwner) {
+            // se não for sucesso chama a mensagem
+            if (!it.status()) {
+                Toast.makeText(context, it.message(), Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
     }
 }

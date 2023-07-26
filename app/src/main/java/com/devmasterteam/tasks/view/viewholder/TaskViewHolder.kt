@@ -56,7 +56,7 @@ class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: 
                 .setTitle(R.string.remocao_de_tarefa)
                 .setMessage(R.string.remover_tarefa)
                 .setPositiveButton(R.string.sim) { dialog, which -> // ao clicar no sim ...
-                    listener.onDeleteClick(task.id) // remove a tarefa
+                    listener.onDeleteClick(task.id) // o id da tarefa é passado p o método q remove a tarefa (onDeleteClick) -> AllTasksFragment
                 }
                 .setNeutralButton(R.string.cancelar, null) // ao clicar em cancelar, nada é feito ...
                 .show() // mostra a tarefa

@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
- * Repositório que orquestra a inserção das tarefas na API
+ * Repositório que orquestra a inserção, remoção das tarefas na API
  *
  */
 
@@ -70,6 +70,26 @@ class TaskRepository(val context: Context): BaseRepository() {
     // responsável por fazer a inserção das tarefas na API - o 'listener' informa quem chamou (no caso, a 'TaskFormViewModel')
     fun create(task: TaskModel, listener: APIListener<Boolean>) {
         val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
+        // 'enqueue' coloca a chamada 'remote' na fila - 'Callback' chama um trecho de código depois que algo é executado - 'Boolean' é o que retorna
+        call.enqueue(object : Callback<Boolean>{
+
+            // sucesso
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                handleResponse(response, listener) // fun na BaseRepository
+            }
+
+            // falha
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                // código p retornar o erro - mensagem de erro p o usuário
+                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED)) // puxa a string (mensagem) do arq de strings
+            }
+        })
+    }
+
+
+    // responsável por chamar a função delete() - o listener retorna a informação
+    fun delete(id: Int, listener: APIListener<Boolean>) {
+        val call = remote.delete(id)
         // 'enqueue' coloca a chamada 'remote' na fila - 'Callback' chama um trecho de código depois que algo é executado - 'Boolean' é o que retorna
         call.enqueue(object : Callback<Boolean>{
 

@@ -1,7 +1,9 @@
 package com.devmasterteam.tasks.service.listener
 
 /**
- * Eventos possíveis para cada tarefa
+ * Pssíveis eventos para cada tarefa
+ *
+ * O Fragment -> AllTasksFragment é q faz a instancia do TaskListener - é q implementa os métodos de eventos das tarefas
  *
  * Se conecta com o Adapter -> TaskAdapter
  *

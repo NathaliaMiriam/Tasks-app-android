@@ -6,6 +6,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -13,7 +14,7 @@ import retrofit2.http.Path
 /**
  * Mapeia os endpoints - Utiliza os métodos/url's de acordo com a DevMasterTeam
  *
- * o 'GET' faz a busca | o 'Call' é a ajuda do Retrofit p fazer a chamada p o endpoint
+ * O 'Call' é a ajuda do Retrofit p fazer a chamada p o endpoint
  *
  * Faz conexão com a TaskModel (que baixa as tarefas da API e converte num objeto)
  *
@@ -28,28 +29,26 @@ import retrofit2.http.Path
 
 interface TaskService {
 
-    // 3 métodos de listagem de tarefas de acordo com a DevMasterTeam:
-
     // lista todas as tarefas sem filtro
-    @GET("Task") // url que chama a função
+    @GET("Task") // url que chama a função -> chamada HTTP
     fun list(): Call<List<TaskModel>>
 
     // lista todas as tarefas dentro de período de sete dias
-    @GET("Task/Next7Days") // url que chama a função
+    @GET("Task/Next7Days") // url que chama a função -> chamada HTTP
     fun listNext(): Call<List<TaskModel>>
 
     // lista todas as tarefas expiradas
-    @GET("Task/Overdue") // url que chama a função
+    @GET("Task/Overdue") // url que chama a função -> chamada HTTP
     fun listOverdue(): Call<List<TaskModel>>
 
 
     // carrega apenas 1 tarefa de acordo com o seu id
-    @GET("Task/{id}") // url que chama a função + o valor que recebe por parametro (id) ... concatenação
+    @GET("Task/{id}") // url que chama a função + o valor que recebe por parametro (id) ... concatenação -> chamada HTTP
     fun load(@Path(value = "id", encoded = true) id: Int): Call<TaskModel>
 
 
     // envia a tarefa
-    @POST("Task") // url que chama a função
+    @POST("Task") // url que chama a função -> chamada HTTP
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun create(
         // mapeamento dos valores que precisam ser enviados:
@@ -61,7 +60,7 @@ interface TaskService {
 
 
     // atualiza a tarefa
-    @PUT("Task") // url que chama a função
+    @PUT("Task") // url que chama a função -> chamada HTTP
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun update(
         // mapeamento dos valores que precisam ser atualizados:
@@ -74,19 +73,19 @@ interface TaskService {
 
 
     // marca a tarefa como completa
-    @PUT("Task/Complete") // url que chama a função
+    @PUT("Task/Complete") // url que chama a função -> chamada HTTP
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun complete(@Field("Id") id: Int): Call<Boolean>
 
 
     // marca a tarefa como incompleta
-    @PUT("Task/Undo") // url que chama a função
+    @PUT("Task/Undo") // url que chama a função -> chamada HTTP
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun undo(@Field("Id") id: Int): Call<Boolean>
 
 
-    // deleta a tarefa
-    @DELETE("Task") // url que chama a função
+    // deleta a tarefa - usa uma chamada mais genérica de HTTP, passando algumas configs
+    @HTTP(method = "DELETE", path = "Task", hasBody = true) // path = url que chama a função -> chamada HTTP | hasBody = temCorpo
     @FormUrlEncoded // informa o envio de infos no corpo 'body' da requisição
     fun delete(@Field("Id") id: Int): Call<Boolean>
 

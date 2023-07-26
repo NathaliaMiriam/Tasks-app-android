@@ -21,11 +21,17 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
     private val priorityRepository = PriorityRepository(application.applicationContext) // faz a instancia do repositório p me dar acesso ao banco
 
-    // atribui p a fragment (AllTasksFragment) o retorno obtido (sucesso ou falha)
+
+    // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha)
     private val _tasks = MutableLiveData<List<TaskModel>>()
     val tasks: LiveData<List<TaskModel>> = _tasks
 
-    // chama/traz a lista de todas as tarefas
+    // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha)
+    private val _delete = MutableLiveData<ValidationModel>()
+    val delete: LiveData<ValidationModel> = _delete
+
+
+    // chama/traz a lista de todas as tarefas atualizada
     fun list() {
         taskRepository.list(object : APIListener<List<TaskModel>>{
 
@@ -34,11 +40,27 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
                 result.forEach { // acessa cada um dos elementos, os elementos são referenciados como 'it'
                     it.priorityDescription = priorityRepository.getDescription(it.priorityId) // busca a info, associa p o elemento 'it', acessa e dá o valor
                 }
-                _tasks.value = result // retorna a lista de todas as tarefas
+                _tasks.value = result // retorna a lista de todas as tarefas atualizada
             }
 
             // falha
             override fun onFailure(message: String) {}
+        })
+    }
+
+    // para deletar uma tarefa de acordo c o seu id
+    fun delete(id: Int) {
+        taskRepository.delete(id, object : APIListener<Boolean>{
+
+            // sucesso - acontece a remoção e mostra a lista de tarefas atualizada
+            override fun onSuccess(result: Boolean) {
+                list()
+            }
+
+            // falha - não acontece a remoção e mostra a mensagem de erro
+            override fun onFailure(message: String) {
+                _delete.value = ValidationModel(message)
+            }
         })
     }
 
