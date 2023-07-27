@@ -28,7 +28,7 @@ open class BaseRepository(val context: Context) {
 
     // criada p simplificar o código e ser passada à algumas funções dos repositórios, pois elas contém o mesmo corpo e não teria pq ficar repetindo
     // recebe uma chamada Call - tipo 'T' é para códigos genéricos, é só um tipo que é passado pq tem que ser passado um tipo
-    fun <T> executeCall(call: Call<T>, listener: APIListener<T>) { // o 'listener' informa quem chamou -> 'TaskFormViewModel', 'TaskRepository'
+    fun <T> executeCall(call: Call<T>, listener: APIListener<T>) { // o 'listener' informa quem chamou
         // 'enqueue' coloca a chamada 'remote' na fila - 'Callback' chama um trecho de código depois que algo é executado
         call.enqueue(object : Callback<T> {
 

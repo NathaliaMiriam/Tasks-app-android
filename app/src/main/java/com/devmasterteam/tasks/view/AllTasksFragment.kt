@@ -41,24 +41,26 @@ class AllTasksFragment : Fragment() {
         binding.recyclerAllTasks.layoutManager = LinearLayoutManager(context) // identifica a RecyclerView - 'layoutManager' gerencia o layout
         binding.recyclerAllTasks.adapter = adapter // recebe a instancia do Adapter
 
-        // faz a instancia do TaskListener - implementa os métodos de eventos das tarefas
+        // faz a instancia do TaskListener - implementa os métodos de eventos de cliques das tarefas
         val listener = object : TaskListener {
             override fun onListClick(id: Int) {
 
             }
 
-            // remove uma tarefa de acordo c o seu id
+            // clique p remover uma tarefa de acordo c o seu id
             override fun onDeleteClick(id: Int) {
                 viewModel.delete(id) // delete() -> TaskService -> TaskListViewModel -> TaskRepository
 
             }
 
+            // clique p marcar uma tarefa como completa de acordo c o seu id e status
             override fun onCompleteClick(id: Int) {
-
+                viewModel.status(id, true) // status() -> TaskService -> TaskListViewModel -> TaskRepository
             }
 
+            // clique p marcar uma tarefa como incompleta de acordo c o seu id e status
             override fun onUndoClick(id: Int) {
-
+                viewModel.status(id, false) // status() -> TaskService -> TaskListViewModel -> TaskRepository
             }
 
         }
@@ -85,19 +87,26 @@ class AllTasksFragment : Fragment() {
     }
 
     private fun observe() {
-        // observa a var 'tasks' da TaskListViewModel - 'viewLifecycleOwner' e não 'this', pois aq é uma fragment
+        // observa a var 'tasks' da TaskListViewModel - 'viewLifecycleOwner' e não 'this', pois aq é uma Fragment
         viewModel.tasks.observe(viewLifecycleOwner) {
             adapter.updateTasks(it) // passa a lista de todas as tarefas p o Adapter, pois ele faz a cola do layout e os dados -> TaskAdapter
         }
 
-        // observa a var 'delete' da TaskListViewModel - 'viewLifecycleOwner' e não 'this', pois aq é uma fragment
+        // observa a var 'delete' da TaskListViewModel - 'viewLifecycleOwner' e não 'this', pois aq é uma Fragment
         viewModel.delete.observe(viewLifecycleOwner) {
-            // se não for sucesso chama a mensagem
+            // se não for sucesso chama a mensagem de falha
             if (!it.status()) {
                 Toast.makeText(context, it.message(), Toast.LENGTH_SHORT).show()
             }
         }
 
+        // observa a var 'status' da TaskListViewModel - 'viewLifecycleOwner' e não 'this', pois aq é uma Fragment
+        viewModel.status.observe(viewLifecycleOwner) {
+            // se não for sucesso chama a mensagem de falha
+            if (!it.status()) {
+                Toast.makeText(context, it.message(), Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
 }

@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
- * Repositório que orquestra a inserção, remoção das tarefas na API
+ * Repositório que orquestra a inserção, remoção, edição das tarefas na API
  *
  * Se conecta com o repositório base -> BaseRepository (repositório que serve de base para os repositórios)
  *
@@ -47,16 +47,28 @@ class TaskRepository(context: Context): BaseRepository(context) {
     }
 
 
-    // responsável por fazer a inserção das tarefas na API - o 'listener' informa quem chamou (no caso, a 'TaskFormViewModel')
+    // prepara a inserção das tarefas na API - o 'listener' informa quem chamou (no caso, a 'TaskFormViewModel')
     fun create(task: TaskModel, listener: APIListener<Boolean>) {
         val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
 
-    // responsável por chamar a função delete() - o listener retorna a informação
+    // prepara a remoção de uma tarefa - o listener retorna a informação
     fun delete(id: Int, listener: APIListener<Boolean>) {
         val call = remote.delete(id)
+        executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
+    }
+
+    // prepara a marcação de uma tarefa como completa
+    fun complete(id: Int, listener: APIListener<Boolean>) {
+        val call = remote.complete(id)
+        executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
+    }
+
+    // prepara a marcação de uma tarefa como incompleta
+    fun undo(id: Int, listener: APIListener<Boolean>) {
+        val call = remote.undo(id)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 

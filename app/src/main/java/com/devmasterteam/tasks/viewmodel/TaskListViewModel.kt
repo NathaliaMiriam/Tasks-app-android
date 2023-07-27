@@ -22,13 +22,17 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     private val priorityRepository = PriorityRepository(application.applicationContext) // faz a instancia do repositório p me dar acesso ao banco
 
 
-    // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha)
+    // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha) ref. ao retorno da lista de todas as tarefas atualizada
     private val _tasks = MutableLiveData<List<TaskModel>>()
     val tasks: LiveData<List<TaskModel>> = _tasks
 
-    // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha)
+    // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha) ref. a remoção de uma tarefa de acordo c o seu id
     private val _delete = MutableLiveData<ValidationModel>()
     val delete: LiveData<ValidationModel> = _delete
+
+    // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha) ref. a marcação se a tarefa está completa ou incompleta de acordo c o seu id e status
+    private val _status = MutableLiveData<ValidationModel>()
+    val status: LiveData<ValidationModel> = _status
 
 
     // chama/traz a lista de todas as tarefas atualizada
@@ -43,10 +47,11 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
                 _tasks.value = result // retorna a lista de todas as tarefas atualizada
             }
 
-            // falha
+            // falha - nada acontece
             override fun onFailure(message: String) {}
         })
     }
+
 
     // para deletar uma tarefa de acordo c o seu id
     fun delete(id: Int) {
@@ -62,6 +67,33 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
                 _delete.value = ValidationModel(message)
             }
         })
+    }
+
+
+    // para marcar se a tarefa está completa ou incompleta de acordo c o seu id e status
+    fun status(id: Int, complete: Boolean) {
+
+        // para indicar o status da tarefa (completa ou incompleta)
+        val listener = object : APIListener<Boolean> {
+
+            // sucesso - mostra a lista de tarefas atualizada
+            override fun onSuccess(result: Boolean) {
+                list()
+            }
+
+            // falha - mostra a mensagem de erro
+            override fun onFailure(message: String) {
+                _status.value = ValidationModel(message)
+            }
+        }
+
+        // se o complete for marcado como verdade ... chama a fun 'complete' passando o id e o listener
+        if (complete) {
+            taskRepository.complete(id, listener)
+            // caso contrário ... chama a fun 'undo' passando o id e o listener
+        } else {
+            taskRepository.undo(id, listener)
+        }
     }
 
 }
