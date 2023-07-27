@@ -24,10 +24,12 @@ import retrofit2.Response
  * Se conecta com a PersonModel (que mapeia as infos retornadas, as infos que chegam do usuário, quando o mesmo faz login ou criação de uma conta)
  *
  * Se conecta com a APIListener (que ouve a resposta da API no momento do login do usuário)
+ *
+ * Se conecta com o repositório base -> BaseRepository (repositório que serve de base para os repositórios)
  */
 
-// para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui - Recebe a herança de BaseRepository
-class PersonRepository(val context: Context): BaseRepository() {
+// para instanciar na LoginViewModel passo o contexto aqui - recebe heranças  de BaseRepository - contexto aq p acessar as heranças de BaseRepository
+class PersonRepository(context: Context): BaseRepository(context) {
 
     // chama/acessa o serviço (PersonService) através do Retrofit
     private val remote = RetrofitClient.getService(PersonService::class.java)
@@ -35,21 +37,6 @@ class PersonRepository(val context: Context): BaseRepository() {
     // faz chamada à API - recebe da viewmodel as infos de login do usuário e o retorno da APIListener
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
         val call = remote.login(email, password)
-        // 'enqueue' coloca a chamada 'remote' na fila - 'Callback' chama um trecho de código depois que algo é executado - 'PersonModel' é o que retorna
-        call.enqueue(object : Callback<PersonModel>{
-
-            // faz o tratamento das chamadas de login com e-mail e senha criados no postman:
-
-            // 1) sucesso - a chamada foi e voltou - contudo, é preciso ver o que tem dentro da chamada (pode ser 200 ou 500 ...) ou seja, nem sempre volta com algo positivo
-            override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                handleResponse(response, listener) // fun na BaseRepository
-            }
-            // 2) falha - de comunicação, não tratada, no carater de exceção ...
-            override fun onFailure(call: Call<PersonModel>, t: Throwable) {
-                // código p retornar o erro - mensagem de erro p o usuário
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED)) // puxa a string (mensagem) do arq de strings
-            }
-
-        })
+        executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 }

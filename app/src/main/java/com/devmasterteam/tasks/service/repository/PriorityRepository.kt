@@ -24,12 +24,12 @@ import retrofit2.Response
  * Pode ser tanto de aplicativos, quanto de navegador...
  * Evita chamadas desnecessárias, deixa mais rápido para o usuário...
  *
- *
+ * Se conecta com o repositório base -> BaseRepository (repositório que serve de base para os repositórios)
  *
  */
 
-// para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui - Recebe a herança de BaseRepository
-class PriorityRepository(val context: Context): BaseRepository() {
+// para instanciar na LoginViewModel passo o contexto aqui - recebe heranças de BaseRepository - contexto aq p acessar as heranças de BaseRepository
+class PriorityRepository(context: Context): BaseRepository(context) {
 
     // chama/acessa o serviço (PriorityService) através do Retrofit
     private val remote = RetrofitClient.getService(PriorityService::class.java)
@@ -69,27 +69,10 @@ class PriorityRepository(val context: Context): BaseRepository() {
 
 
     // retorna da API a lista de prioridades - informo por parametro que existe o listener
+    // o listener é chamado p fazer o caminho de volta ... Ida : LoginViewModel -> PriorityRepository | Volta: PriorityRepository -> LoginViewModel
     fun list(listener: APIListener<List<PriorityModel>>) {
-        // o listener é chamado p fazer o caminho de volta ... Ida : LoginViewModel -> PriorityRepository | Volta: PriorityRepository -> LoginViewModel
         val call = remote.list()
-        // 'enqueue' coloca a chamada 'remote' na fila - 'Callback' chama um trecho de código depois que algo é executado - 'PriorityModel' é o que retorna
-        call.enqueue(object : Callback<List<PriorityModel>>{ // <List<PriorityModel>> -> lista de prioridades
-
-            // resposta com sucesso
-            override fun onResponse(
-                call: Call<List<PriorityModel>>,
-                response: Response<List<PriorityModel>>
-            ) {
-                handleResponse(response, listener) // fun na BaseRepository
-            }
-
-            // resposta com falha
-            override fun onFailure(call: Call<List<PriorityModel>>, t: Throwable) {
-                // código p retornar o erro - mensagem de erro p o usuário
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED)) // puxa a string (mensagem) do arq de strings
-            }
-
-        })
+        executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
     // retorna do banco de dados a lista de prioridades - não preciso informar nada por parametro
