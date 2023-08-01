@@ -12,6 +12,7 @@ import androidx.collection.arrayMapOf
 import androidx.lifecycle.ViewModelProvider
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.ActivityTaskFormBinding
+import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.model.PriorityModel
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.viewmodel.TaskFormViewModel
@@ -41,6 +42,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
     // intancia uma lista vazia p expor/dar acesso à lista de prioridades
     private var listPriority: List<PriorityModel> = mutableListOf()
 
+    // id da tarefa - 0 é o valor padrão de taskIdentification (numa criação o id é sempre 0, na edição o id é sempre diferente de 0)
+    private var taskIdentification = 0
+
+
+    // fun chamada com a inicialização da Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,10 +59,12 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         binding.buttonDate.setOnClickListener(this)
 
 
-        // chama as prioridades do Spinner - 'loadPriorities' é a fun criada na TaskFormViewModel
+        // chama/carrega da 'TaskFormViewModel' as prioridades do Spinner
         viewModel.loadPriorities()
 
-        // chama a priorityList da TaskFormViewModel
+        // chama/carrega as infos que constam dentro de uma tarefa
+        loadDataFromActivity()
+
         observe()
 
 
@@ -74,6 +82,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         }
     }
 
+
     // trata a informação recebida da interação do usuário no DatePickerDialog, ou seja, a data escolhida precisa ser mostrada na tela
     override fun onDateSet(v: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
 
@@ -87,9 +96,36 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
     }
 
-     // trata o Spinner (código que preenche o Spinner, traz as prioridades salvas no banco de dados), ao clicar na setinha todas as prioridades são mostradas ao usuário
+
+    // carrega as infos que constam dentro de uma tarefa
+    private fun loadDataFromActivity() {
+        val bundle = intent.extras // pega as infos extras usando a própria var da Activity -> var intent -> na AllTasksFragment
+        // se o Bundle for diferente de nulo, as infos são buscadas
+        if (bundle != null) {
+            taskIdentification = bundle.getInt(TaskConstants.BUNDLE.TASKID) // instancia a 'taskIdentification' c as infos do Bundle (id da tarefa)
+            viewModel.load(taskIdentification)// busca/recebe da 'TaskFormViewModel' a tarefa com seu id
+        }
+    }
+
+
+    // trata/encontra a posição(index) da prioridade(priorityId) dentro do spinner
+    private fun getIndex(priorityId: Int): Int {
+        var index = 0 // o index começa na posição 0
+        // percorre a lista buscando a posição do 'priorityId'
+        for (l in listPriority) { // p cada elemento na lista de prioridades... recebe o tratamento de 'l'
+            if (l.id == priorityId) {
+                break // quebra o laço de repetição e retorna o index
+            }
+            index++ // continua incrementando até encontrar o index
+        }
+        return index
+    }
+
+
     private fun observe() {
-         // observa a priorityList da TaskFormViewModel
+
+         // trata o Spinner (código que preenche o Spinner, traz as prioridades salvas no banco de dados), ao clicar na setinha todas as prioridades são mostradas ao usuário
+         // observa a var priorityList da TaskFormViewModel
         viewModel.priorityList.observe(this) { // traz a lista de prioridades - 'it' é a lista
             listPriority = it
             val list = mutableListOf<String>() // lista de prioridades que aparecem ao clicar na setinha da 'Prioridade'
@@ -101,27 +137,53 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
             binding.spinnerPriority.adapter = adapter
         }
 
-         // observa a taskSave da TaskFormViewModel
+         // observa a var taskSave da TaskFormViewModel
          viewModel.taskSave.observe(this) { // 'it' é a ValidationModel
-             if (it.status()) { // se o status do cadastro da tarefa for de sucesso, mostra a mensagem de sucesso e fecha a Activity
-                toast("Tarefa adicionada com sucesso") // 'toast' é a fun p as mensagens de sucesso e falha
-                 finish()
-             } else { // caso contrário, mostra a mensagem de falha
-                 toast(it.message()) // 'toast' é a fun p as mensagens de sucesso e falha
+             if (it.status()) { // se o status do cadastro da tarefa for de sucesso... faz a verificação se é uma criação ou edição
+                 if (taskIdentification == 0) { // se o id da tarefa for 0, é uma criação e mostra a mensagem
+                     toast("Tarefa adicionada com sucesso.")
+                 } else { // caso contrário, é uma edição e mostra a mensagem
+                     toast("Tarefa editada com sucesso.")
+                 }
+                 finish() // e fecha a Activity
+             } else { // caso contrário, se o status do cadastro da tarefa for de insucesso... mostra a mensagem de falha
+                 toast(it.message())
              }
          }
+
+        // observa a var task da TaskFormViewModel p saber se a tarefa SIM carregou ... (se for carregada, as suas infos serão mostradas ao usuário) ...
+        viewModel.task.observe(this) {
+            // as infos são atribuídas ao xml da Activity:
+            binding.editDescription.setText(it.description) // passa a info da descrição
+            binding.spinnerPriority.setSelection(getIndex(it.priorityId)) // passa a info da prioridade de acordo com o seu index
+            binding.checkComplete.isChecked = it.complete // passa a info de tarefa completa ou incompleta ('true' -> completa | 'false' -> incompleta)
+
+            // passa a info da data -> pega o valor que vem da API -> converte p uma data -> formata p o jeito que quero
+            val date = SimpleDateFormat("yyyy-MM-dd").parse(it.dueDate) // converte a data p o tipo q quero
+            binding.buttonDate.text = SimpleDateFormat("dd/MM/yyyy").format(date)  // formata a data
+        }
+
+        // observa a var taskLoad da TaskFormViewModel p saber se a tarefa NÃO carregou ... (se não for carregada, será mostrada a mensagem de erro ao usuário) ...
+        viewModel.taskLoad.observe(this) {
+            if (!it.status()) { // se a tarefa não for carregada...
+                toast(it.message()) // é mostrada a mensagem de erro ...
+                finish() // e a Activity é fechada
+            }
+        }
     }
+
 
     // para as mensagens de sucesso e falha - p simplificar o código
     private fun toast(str: String) {
         Toast.makeText(applicationContext, str, Toast.LENGTH_SHORT).show()
     }
 
+
     // trata o botão de add tarefa
     private fun handleSave() {
         // instancia a TaskModel p agrupar os campos preenchidos p criar/add as tarefas
-        val task = TaskModel().apply {
-            this.id = 0 // por ser uma tarefa nova não existirá um 'id' por ora, por isso foi colocado 0
+        val task = TaskModel().apply { // aplica os valores q vem da interface:
+            this.id = taskIdentification
             this.description = binding.editDescription.text.toString()
             this.complete = binding.checkComplete.isChecked
             this.dueDate = binding.buttonDate.text.toString()
@@ -133,6 +195,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
         viewModel.save(task) // faz a chamada, fala p a viewModel salvar o agrupamento dos campos preenchidos p criar/add as tarefas - fun 'save' na TaskFormViewModel
     }
+
 
     // trata o DatePickerDialog - consegue mostrar a info para a interação do usuário, ao dar um ok após a escolha da data a informação vai para onDateSet p ser tratada
     private fun handleDate() {

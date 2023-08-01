@@ -42,7 +42,7 @@ interface TaskService {
     fun listOverdue(): Call<List<TaskModel>>
 
 
-    // carrega apenas 1 tarefa de acordo com o seu id
+    // busca/carrega apenas 1 tarefa de acordo com o seu id
     @GET("Task/{id}") // url que chama a função + o valor que recebe por parametro (id) ... concatenação -> chamada HTTP
     fun load(@Path(value = "id", encoded = true) id: Int): Call<TaskModel>
 

@@ -36,17 +36,18 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonLogin.setOnClickListener(this)
         binding.textRegister.setOnClickListener(this)
 
-        // verifica se os dados do usuário estão preenchidos, ou seja, se o usuário está logado
+        // chama a 'verifyLoggedUser()' p informar se os dados do usuário estão preenchidos, ou seja, se o usuário está logado ou não
         viewModel.verifyLoggedUser()
 
         // observadores
         observe()
     }
 
+    // evento de clique
     override fun onClick(v: View) {
         // faz a verificação de qual elemento da tela de login foi clicado
         if (v.id == R.id.button_login) {
-            handleLogin() // método que trabalha com o botão de login
+            handleLogin() // chama o método que trabalha com o botão de login
         }
     }
 
@@ -58,7 +59,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             if (it.status()) {
                 startActivity(Intent(applicationContext, MainActivity::class.java))
                 finish() // e encerra a Activity de login, permitindo que o usuário fique logado sem a necessidade de fazer login novamente
-                // senão, mostra a mensagem de erro
+                // caso contrário, mostra a mensagem de erro
             } else {
                 Toast.makeText(applicationContext, it.message(), Toast.LENGTH_SHORT).show()
             }
@@ -73,7 +74,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    // botão de login
+    // trata o botão de login
     private fun handleLogin() {
         val email = binding.editEmail.text.toString() // pega o e-mail
         val password = binding.editPassword.text.toString() // pega a senha

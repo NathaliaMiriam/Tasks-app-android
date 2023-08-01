@@ -26,47 +26,60 @@ class TaskRepository(context: Context): BaseRepository(context) {
     private val remote = RetrofitClient.getService(TaskService::class.java)
 
 
-    // prepara a chamada da lista de tarefas -> TaskService
-    fun list(listener: APIListener<List<TaskModel>>) { // o listener ouve, pois depois será retornado p a viewModel
+
+    // prepara a chamada da lista de tarefas -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
+    fun list(listener: APIListener<List<TaskModel>>) { // o listener ouve quem chamou para depois retornar p a viewModel
         val call = remote.list() // 'list()' está na TaskService
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
 
-    // prepara a chamada da lista de tarefas dentro de período de sete dias -> TaskService
-    fun listNext(listener: APIListener<List<TaskModel>>) { // o listener ouve, pois depois será retornado p a viewModel
+    // prepara a chamada da lista de tarefas dentro de período de sete dias -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
+    fun listNext(listener: APIListener<List<TaskModel>>) {
         val call = remote.listNext() // 'listNext()' está na TaskService
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
 
-    // prepara a chamada da lista de tarefas expiradas -> TaskService
-    fun listOverdue(listener: APIListener<List<TaskModel>>) { // o listener ouve, pois depois será retornado p a viewModel
+    // prepara a chamada da lista de tarefas expiradas -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
+    fun listOverdue(listener: APIListener<List<TaskModel>>) {
         val call = remote.listOverdue() // 'listOverdue()' está na TaskService
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
 
-    // prepara a inserção das tarefas na API - o 'listener' informa quem chamou (no caso, a 'TaskFormViewModel')
+    // prepara a inserção das tarefas na API -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
     fun create(task: TaskModel, listener: APIListener<Boolean>) {
         val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
+    // prepara a edição das tarefas na API -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
+    fun update(task: TaskModel, listener: APIListener<Boolean>) {
+        val call = remote.update(task.id, task.priorityId, task.description, task.dueDate, task.complete)
+        executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
+    }
 
-    // prepara a remoção de uma tarefa - o listener retorna a informação
+    // prepara a busca de uma tarefa -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
+    fun load(id: Int, listener: APIListener<TaskModel>) {
+        val call = remote.load(id)
+        executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
+    }
+
+
+    // prepara a remoção de uma tarefa -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
     fun delete(id: Int, listener: APIListener<Boolean>) {
         val call = remote.delete(id)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
-    // prepara a marcação de uma tarefa como completa
+    // prepara a marcação de uma tarefa como completa -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
     fun complete(id: Int, listener: APIListener<Boolean>) {
         val call = remote.complete(id)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
 
-    // prepara a marcação de uma tarefa como incompleta
+    // prepara a marcação de uma tarefa como incompleta -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
     fun undo(id: Int, listener: APIListener<Boolean>) {
         val call = remote.undo(id)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código

@@ -34,7 +34,8 @@ class PersonRepository(context: Context): BaseRepository(context) {
     // chama/acessa o serviço (PersonService) através do Retrofit
     private val remote = RetrofitClient.getService(PersonService::class.java)
 
-    // faz chamada à API - recebe da viewmodel as infos de login do usuário e o retorno da APIListener
+
+    // faz a chamada à API - recebe da viewmodel as infos de login do usuário e o retorno da APIListener
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
         val call = remote.login(email, password)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código

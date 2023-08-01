@@ -1,7 +1,7 @@
 package com.devmasterteam.tasks.service.listener
 
 /**
- * Pssíveis eventos para cada tarefa
+ * Pssíveis eventos de clique para cada tarefa
  *
  * O Fragment -> AllTasksFragment é q faz a instancia do TaskListener - é q implementa os métodos de eventos das tarefas
  *
@@ -12,16 +12,16 @@ package com.devmasterteam.tasks.service.listener
 
 interface TaskListener {
 
-    // click para edição
+    // clique para edição
     fun onListClick(id: Int)
 
-    // remoção
+    // clique para remoção
     fun onDeleteClick(id: Int)
 
-    // completa tarefa
+    // clique para completar a tarefa
     fun onCompleteClick(id: Int)
 
-    // descompleta tarefa
+    // clique para descompletar a tarefa
     fun onUndoClick(id: Int)
 
 }

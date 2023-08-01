@@ -13,6 +13,10 @@ import com.devmasterteam.tasks.service.repository.TaskRepository
 
 /**
  * Faz a chamada à API e retorna as informações
+ *
+ * Se conecta com a AllTasksFragment
+ *
+ * Se conecta com os repositórios: TaskRepository, PriorityRepository
  */
 
 class TaskListViewModel(application: Application) : AndroidViewModel(application) { // herda de AndroidViewModel p obter o contexto e fazer a instancia abaixo
@@ -62,7 +66,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
                 list()
             }
 
-            // falha - não acontece a remoção e mostra a mensagem de erro
+            // falha - não acontece a remoção e instancia a ValidationModel c a mensagem de erro
             override fun onFailure(message: String) {
                 _delete.value = ValidationModel(message)
             }
@@ -70,10 +74,9 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-    // para marcar se a tarefa está completa ou incompleta de acordo c o seu id e status
+    // para marcar o status de uma tarefa como completa ou incompleta de acordo c o seu id
     fun status(id: Int, complete: Boolean) {
 
-        // para indicar o status da tarefa (completa ou incompleta)
         val listener = object : APIListener<Boolean> {
 
             // sucesso - mostra a lista de tarefas atualizada
@@ -81,7 +84,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
                 list()
             }
 
-            // falha - mostra a mensagem de erro
+            // falha - instancia a ValidationModel c a mensagem de erro
             override fun onFailure(message: String) {
                 _status.value = ValidationModel(message)
             }

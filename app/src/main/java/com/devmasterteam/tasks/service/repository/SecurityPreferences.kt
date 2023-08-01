@@ -7,7 +7,7 @@ import android.content.SharedPreferences
  * SharedPreferences - acesso a dados rápidos do projeto, não tão complexos, que não sofrem mudanças frequentes
  *                   - salva os dados como se fosse um banco de dados, ou seja, toda e qualquer info add na aplicação pelo usuário fica salva
  *
- * Recebe os dados de login do usuário (e-mail | senha)
+ * Recebe e salva os dados de login do usuário (e-mail | senha)
  */
 
 class SecurityPreferences(context: Context) { // para eu conseguir instanciar lá na LoginViewModel é necessário o contexto aqui...

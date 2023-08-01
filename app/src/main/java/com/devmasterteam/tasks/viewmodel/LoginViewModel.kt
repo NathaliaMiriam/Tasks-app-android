@@ -21,6 +21,12 @@ import com.devmasterteam.tasks.service.repository.remote.RetrofitClient
  *
  * Chama a API
  *
+ * Se conecta com a LoginActivity
+ *
+ * Se conecta com os repositórios: PersonRepository, PriorityRepository
+ *
+ * Se conecta com a SharedPreferences
+ *
  * MutableLiveData -> muda de informação
  * LiveData -> não muda de informação
  *
@@ -40,20 +46,20 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val securityPreferences = SecurityPreferences(application.applicationContext)
 
 
-    // var observada pela LoginActivity na fun observe() - 'ValidationModel' é a classe que agrupa e atribui os status de login
-    private val _login = MutableLiveData<ValidationModel>()
+    // atribui p a Activity -> LoginActivity  o retorno obtido (sucesso ou falha) ref. ao login do usuário
+    private val _login = MutableLiveData<ValidationModel>() // 'ValidationModel' é a classe que agrupa e atribui os status de login
     val login: LiveData<ValidationModel> = _login
 
-    // var observada pela LoginActivity na fun observe()
-    private val _loggedUser = MutableLiveData<Boolean>()
+    // atribui p a Activity -> LoginActivity  o retorno obtido (sucesso ou falha) ref. ao usuário estar ou não logado
+    private val _loggedUser = MutableLiveData<Boolean>() // 'Boolean' é o retorno
     val loggedUser: LiveData<Boolean> = _loggedUser
 
 
-     // faz login usando API
+     // para o login usando a API
     fun doLogin(email: String, password: String) {
         personRepository.login(email, password, object : APIListener<PersonModel> { // passa as infos de login do usuário p o repositório
 
-            // responde ao usuário se o login deu certo
+            // sucesso
             override fun onSuccess(result: PersonModel) { // 'result: PersonModel' -> tenho os dados de login do usuário
 
                 // salva na SecurityPreferences os dados de login do usuário, após a captura -- 'store()' é a fun da SecurityPreferences que salva dados
@@ -68,9 +74,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 _login.value = ValidationModel()
             }
 
-            // responde ao usuário se o login deu errado
+            // falha - instancia a ValidationModel c a mensagem de erro respondendo ao usuário q o login deu errado
             override fun onFailure(message: String) {
-                _login.value = ValidationModel(message) // se não for sucesso instancia a ValidationModel c a mensagem de erro
+                _login.value = ValidationModel(message)
             }
 
         })
