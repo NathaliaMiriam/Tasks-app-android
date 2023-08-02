@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.listener.APIListener
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.service.model.ValidationModel
@@ -25,6 +26,8 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
     private val priorityRepository = PriorityRepository(application.applicationContext) // faz a instancia do repositório p me dar acesso ao banco
 
+    private var taskFilter = 0
+
 
     // atribui p o Fragment -> AllTasksFragment o retorno obtido (sucesso ou falha) ref. ao retorno da lista de todas as tarefas atualizada
     private val _tasks = MutableLiveData<List<TaskModel>>()
@@ -39,9 +42,12 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     val status: LiveData<ValidationModel> = _status
 
 
-    // chama/traz a lista de todas as tarefas atualizada
-    fun list() {
-        taskRepository.list(object : APIListener<List<TaskModel>>{
+    // chama/traz a lista de todas as tarefas atualizadas, as tarefas dos próximos 7 dias atualizadas e as tarefas expiradas atualizadas de acordo com os filtros
+    fun list(filter: Int) {
+
+        taskFilter = filter // atualiza o valor
+
+        val listener = object : APIListener<List<TaskModel>>{
 
             // sucesso - preenche o 'priorityDescription' (descrição da prioridade) usando o banco de dados
             override fun onSuccess(result: List<TaskModel>) {
@@ -53,7 +59,19 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
             // falha - nada acontece
             override fun onFailure(message: String) {}
-        })
+        }
+
+        when (filter) {
+            TaskConstants.FILTER.ALL -> {
+                taskRepository.list(listener)
+            }
+            TaskConstants.FILTER.NEXT -> {
+                taskRepository.listNext(listener)
+            }
+            else -> {
+                taskRepository.listOverdue(listener)
+            }
+        }
     }
 
 
@@ -63,7 +81,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
             // sucesso - acontece a remoção e mostra a lista de tarefas atualizada
             override fun onSuccess(result: Boolean) {
-                list()
+                list(taskFilter)
             }
 
             // falha - não acontece a remoção e instancia a ValidationModel c a mensagem de erro
@@ -81,7 +99,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
             // sucesso - mostra a lista de tarefas atualizada
             override fun onSuccess(result: Boolean) {
-                list()
+                list(taskFilter)
             }
 
             // falha - instancia a ValidationModel c a mensagem de erro

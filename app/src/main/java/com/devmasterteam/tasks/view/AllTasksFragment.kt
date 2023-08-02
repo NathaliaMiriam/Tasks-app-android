@@ -42,6 +42,9 @@ class AllTasksFragment : Fragment() {
     // instancia o Adapter
     private val adapter = TaskAdapter()
 
+    // var dos argumentos das Fragments
+    private var taskFilter = 0
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
         // passa o contexto p a 'TaskListViewModel'
@@ -51,6 +54,9 @@ class AllTasksFragment : Fragment() {
         // RecyclerView:
         binding.recyclerAllTasks.layoutManager = LinearLayoutManager(context) // identifica a RecyclerView - 'layoutManager' gerencia o layout
         binding.recyclerAllTasks.adapter = adapter // recebe a instancia do Adapter
+
+        // busca/pega os argumentos das Fragments
+        taskFilter = requireArguments().getInt(TaskConstants.BUNDLE.TASKFILTER, 0) // recebe chave e valor padrão ... '0' é p o caso de uma Frag. vim sem argumento
 
 
         // faz a instancia do TaskListener - implementa os métodos de eventos de cliques das tarefas
@@ -93,10 +99,10 @@ class AllTasksFragment : Fragment() {
     }
 
 
-    // carrega o Fragment adequadamente após a inserção/edição de uma tarefa
+    // carrega os Fragments adequadamente após a inserção/edição de uma tarefa
     override fun onResume() {
         super.onResume()
-        viewModel.list() // chama/recebe a lista de tarefas atualizada
+        viewModel.list(taskFilter) // chama/recebe a lista de tarefas atualizada
     }
 
 

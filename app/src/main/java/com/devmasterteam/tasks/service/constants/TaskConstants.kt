@@ -12,7 +12,7 @@ class TaskConstants private constructor() {
         const val PERSON_NAME = "personname"
     }
 
-    // Requisições API
+    // requisições API
     object HEADER {
         const val TOKEN_KEY = "token"
         const val PERSON_KEY = "personkey"
@@ -24,9 +24,11 @@ class TaskConstants private constructor() {
 
     object BUNDLE {
         const val TASKID = "taskid"
-        const val TASKFILTER = "taskfilter"
+        const val TASKFILTER = "taskfilter" // p os argumentos de cada Fragment, colocados em: mobile_navigation -> design
     }
 
+    // p os argumentos de cada Fragment, colocados em: mobile_navigation -> design
+    // cada uma das Fragments, assim que clicada, traz uma info... Assim, é possível identificar o que a config. da Fragment foi criada p fazer
     object FILTER {
         const val ALL = 0
         const val NEXT = 1
