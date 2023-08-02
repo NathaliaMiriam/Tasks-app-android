@@ -70,13 +70,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 // add os headers no RetrofitClient
                 RetrofitClient.addHeaders(result.token, result.personKey)
 
-                // se for sucesso instancia a ValidationModel vazia
-                _login.value = ValidationModel()
+                _login.value = ValidationModel() // instancia a ValidationModel vazia
             }
 
-            // falha - instancia a ValidationModel c a mensagem de erro respondendo ao usuário q o login deu errado
+            // falha
             override fun onFailure(message: String) {
-                _login.value = ValidationModel(message)
+                _login.value = ValidationModel(message) // instancia a ValidationModel c a mensagem de erro respondendo ao usuário q o login deu errado
             }
 
         })

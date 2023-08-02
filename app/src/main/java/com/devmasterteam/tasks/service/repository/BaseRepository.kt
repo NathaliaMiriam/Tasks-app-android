@@ -1,6 +1,10 @@
 package com.devmasterteam.tasks.service.repository
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.listener.APIListener
@@ -48,6 +52,47 @@ open class BaseRepository(val context: Context) {
             }
 
         })
+    }
+
+
+    // verifica se a conexão com a internet está disponivel
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isConnectionAvailable(): Boolean {
+
+        // para assumir que não existe coneção com a internet
+        var result = false
+
+        // pega o serviço do sistema e converte - 'getSystemService' pega sistemas do Android - 'ConnectivityManager' é um gerenciador de conexões q consegue me informar algumas coisas
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // versões mais novas do Android usam o código abaixo
+        // se o Android tiver uma API de 23 p cima, o código abaixo é usado
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // 'VERSION.SDK_INT' pega a versão do Android, retona a API utilizada - 'M' é a API 23 ('Ctrl + B' verifica)
+            // com o uso do gerenciador de conexões verifica se existe uma rede de internet ativa, se tiver, pega as funcionalidades da rede ... cód. disp. a partir da API 23
+            val activeNet = cm.activeNetwork ?: return false
+            // verifica/pega as funcionalidades da rede - 'getNetworkCapabilities' pega as funcionalidades/capacidades da rede
+            val netWorkCapabilities = cm.getNetworkCapabilities(activeNet) ?: return false
+
+            result = when { // quando as funcionalidades da rede forem verdade ... se tiver algum dos dois abaixo, significa que tem conexão
+                netWorkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                netWorkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false // caso contrário, caso não tenha nenhum dos dois acima, significa que não tem conexão
+            }
+            // versões mais antigas do Android usam o código abaixo
+            // caso contrário, se o Android não tiver uma API de 23 p cima, o código abaixo é usado - os códigos estão sublinhados pq eventualmente podem morrer
+        } else {
+            if (cm.activeNetworkInfo != null) {
+                result = when (cm.activeNetworkInfo!!.type) {
+                    // 3 tipos de verificações feitas abaixo do Android 23
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    ConnectivityManager.TYPE_ETHERNET -> true
+                    else -> false
+                }
+            }
+        }
+
+        return result // retorna o que eu obtive -> true (conexão) | false (sem conexão)
     }
 
 }

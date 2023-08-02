@@ -1,6 +1,8 @@
 package com.devmasterteam.tasks.service.repository
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.listener.APIListener
@@ -70,7 +72,15 @@ class PriorityRepository(context: Context): BaseRepository(context) {
 
     // retorna da API a lista de prioridades - informo por parametro que existe o listener
     // o listener é chamado p fazer o caminho de volta ... Ida : LoginViewModel -> PriorityRepository | Volta: PriorityRepository -> LoginViewModel
+    @RequiresApi(Build.VERSION_CODES.M)
     fun list(listener: APIListener<List<PriorityModel>>) {
+
+        // primeiro verifica se existe ou não conexão com a internet
+        if (!isConnectionAvailable()) { // se não houver conexão com a internet...
+            listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))// uma mensagem é mostrada ao usuário ... mensagem buscada no xml de strings
+            return // e a execução é quebrada
+        }
+
         val call = remote.list()
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }

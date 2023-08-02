@@ -1,6 +1,8 @@
 package com.devmasterteam.tasks.service.repository
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.listener.APIListener
@@ -36,7 +38,15 @@ class PersonRepository(context: Context): BaseRepository(context) {
 
 
     // faz a chamada à API - recebe da viewmodel as infos de login do usuário e o retorno da APIListener
+    @RequiresApi(Build.VERSION_CODES.M)
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
+
+        // primeiro verifica se existe ou não conexão com a internet
+        if (!isConnectionAvailable()) { // se não houver conexão com a internet...
+            listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))// uma mensagem é mostrada ao usuário ... mensagem buscada no xml de strings
+            return // e a execução é quebrada
+        }
+
         val call = remote.login(email, password)
         executeCall(call, listener) // 'executeCall()' está na 'BaseRepository', criada p simplificar o código
     }
