@@ -4,25 +4,32 @@ import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.*
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.ActivityMainBinding
+import com.devmasterteam.tasks.viewmodel.MainViewModel
+
+/**
+ * Faz a config. do menu
+ */
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
@@ -48,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val drawerLayout: DrawerLayout = binding.drawerLayout // 'DrawerLayout' é a gaveta do menu, é quando arrasta/abre o menu da esquerda p direita
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(
@@ -56,6 +63,19 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // trata o clique do item 'sair' do menu
+        navView.setNavigationItemSelectedListener {
+            if (it.itemId == R.id.nav_logout) { // se o clique for no botão 'sair'...
+                viewModel.logout() // chama o 'logout' da MainViewModel, permitindo a saída do app ...
+                startActivity(Intent(applicationContext, LoginActivity::class.java)) // volta para a Activity de login
+                finish() // e mata a Activity principal
+            } else { // caso contrário, se o clique ñ for no botão 'sair' ... termina a interrupção e as coisas voltam a acontecer como programado anteriormente
+                NavigationUI.onNavDestinationSelected(it, navController) // 'it' é o MenuItem
+                drawerLayout.closeDrawer(GravityCompat.START) // fecha a gaveta do menu passando a orientação de p onde ela tem q fechar, 'START' -> esquerda, fecha p esquerda
+            }
+            true
+        }
     }
 
     private fun observe() {
