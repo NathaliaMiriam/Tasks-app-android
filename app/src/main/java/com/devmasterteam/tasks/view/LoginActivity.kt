@@ -32,9 +32,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         // layout
         setContentView(binding.root)
 
-        // eventos
+        // eventos de clique
         binding.buttonLogin.setOnClickListener(this)
-        binding.textRegister.setOnClickListener(this)
+        binding.textRegister.setOnClickListener(this) // botão de novo cadastro
 
         // chama a 'verifyLoggedUser()' p informar se os dados do usuário estão preenchidos, ou seja, se o usuário está logado ou não
         viewModel.verifyLoggedUser()
@@ -43,11 +43,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         observe()
     }
 
-    // evento de clique
+    // implementa o evento de clique nos botões da tela de login -> login e cadastro
     override fun onClick(v: View) {
-        // faz a verificação de qual elemento da tela de login foi clicado
+        // se for o botão de login... chama o método que trata o botão de login
         if (v.id == R.id.button_login) {
-            handleLogin() // chama o método que trabalha com o botão de login
+            handleLogin()
+        } else if (v.id == R.id.text_register) {  // mas se for o botão de cadastro... abre/inicia a Activity responsável pelo cadastro
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 
