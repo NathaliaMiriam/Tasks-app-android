@@ -39,8 +39,7 @@ class PersonRepository(context: Context): BaseRepository(context) {
     private val remote = RetrofitClient.getService(PersonService::class.java)
 
 
-    // passa p à API as infos de login do usuário e o retorno da APIListener
-    @RequiresApi(Build.VERSION_CODES.M)
+    // chama a API - passa p à API as infos de login do usuário e o retorno da APIListener
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -54,8 +53,7 @@ class PersonRepository(context: Context): BaseRepository(context) {
     }
 
 
-    // passa p à API as infos de cadastro do usuário
-    @RequiresApi(Build.VERSION_CODES.M)
+    // chama a API - passa p à API as infos de cadastro do usuário
     fun create(name: String, email: String, password: String, listener: APIListener<PersonModel>) {
 
         // primeiro verifica se existe ou não conexão com a internet

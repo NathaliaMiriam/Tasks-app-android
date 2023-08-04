@@ -2,6 +2,7 @@ package com.devmasterteam.tasks.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.drawerlayout.widget.DrawerLayout
@@ -41,6 +42,9 @@ class MainActivity : AppCompatActivity() {
         // navegação
         setupNavigation()
 
+        // chama/recebe o nome do usuário
+        viewModel.loadUserName()
+
         // observadores
         observe()
     }
@@ -79,6 +83,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observe() {
-
+        // observa a var da MainViewModel p saber o retorno ref. ao nome do usuário
+        viewModel.name.observe(this) {
+            // identifica, busca e atribui o nome ao menu
+            val header = binding.navView.getHeaderView(0) // identifica o elemento de layout - 'getHeaderView' pega o header, o index é 0 pq tem somente 1 header -> activity_main.xml
+            header.findViewById<TextView>(R.id.text_name).text = it // busca o elem. pelo tipo, q é um 'TextView' e pelo id - atribui
+        }
     }
 }

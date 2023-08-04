@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(binding.root)
 
         // eventos de clique
-        binding.buttonLogin.setOnClickListener(this)
+        binding.buttonLogin.setOnClickListener(this) // botão de login
         binding.textRegister.setOnClickListener(this) // botão de novo cadastro
 
         // chama a 'verifyLoggedUser()' p informar se os dados do usuário estão preenchidos, ou seja, se o usuário está logado ou não
