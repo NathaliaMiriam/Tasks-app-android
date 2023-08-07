@@ -30,7 +30,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityLoginBinding.inflate(layoutInflater)
 
         // layout
+        supportActionBar?.hide() // tira a barra de navegação do app - se for nulo não quebra a aplicação
         setContentView(binding.root)
+
 
         // eventos de clique
         binding.buttonLogin.setOnClickListener(this) // botão de login

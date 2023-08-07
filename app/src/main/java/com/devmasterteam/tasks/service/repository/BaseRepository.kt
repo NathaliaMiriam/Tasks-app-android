@@ -56,7 +56,6 @@ open class BaseRepository(val context: Context) {
 
 
     // verifica se a conexão com a internet está disponivel
-    @RequiresApi(Build.VERSION_CODES.M)
     fun isConnectionAvailable(): Boolean {
 
         // para assumir que não existe coneção com a internet

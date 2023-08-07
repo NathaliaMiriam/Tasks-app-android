@@ -32,7 +32,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
 
 
     // prepara a chamada da lista de tarefas -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun list(listener: APIListener<List<TaskModel>>) { // o listener ouve quem chamou para depois retornar p a viewModel
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -47,7 +46,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
 
 
     // prepara a chamada da lista de tarefas dentro de período de sete dias -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun listNext(listener: APIListener<List<TaskModel>>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -62,7 +60,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
 
 
     // prepara a chamada da lista de tarefas expiradas -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun listOverdue(listener: APIListener<List<TaskModel>>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -77,7 +74,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
 
 
     // prepara a inserção das tarefas na API -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun create(task: TaskModel, listener: APIListener<Boolean>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -91,7 +87,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
     }
 
     // prepara a edição das tarefas na API -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun update(task: TaskModel, listener: APIListener<Boolean>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -105,7 +100,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
     }
 
     // prepara a busca de uma tarefa -> a fun e o tipo de retorno <TaskModel> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun load(id: Int, listener: APIListener<TaskModel>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -120,7 +114,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
 
 
     // prepara a remoção de uma tarefa -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun delete(id: Int, listener: APIListener<Boolean>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -134,7 +127,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
     }
 
     // prepara a marcação de uma tarefa como completa -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun complete(id: Int, listener: APIListener<Boolean>) {
 
         // primeiro verifica se existe ou não conexão com a internet
@@ -148,7 +140,6 @@ class TaskRepository(context: Context): BaseRepository(context) {
     }
 
     // prepara a marcação de uma tarefa como incompleta -> a fun e o tipo de retorno <Boolean> tenho no 'TaskService'
-    @RequiresApi(Build.VERSION_CODES.M)
     fun undo(id: Int, listener: APIListener<Boolean>) {
 
         // primeiro verifica se existe ou não conexão com a internet

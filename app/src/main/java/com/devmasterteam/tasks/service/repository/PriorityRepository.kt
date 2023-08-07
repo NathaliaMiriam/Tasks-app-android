@@ -72,7 +72,6 @@ class PriorityRepository(context: Context): BaseRepository(context) {
 
     // retorna da API a lista de prioridades - informo por parametro que existe o listener
     // o listener é chamado p fazer o caminho de volta ... Ida : LoginViewModel -> PriorityRepository | Volta: PriorityRepository -> LoginViewModel
-    @RequiresApi(Build.VERSION_CODES.M)
     fun list(listener: APIListener<List<PriorityModel>>) {
 
         // primeiro verifica se existe ou não conexão com a internet

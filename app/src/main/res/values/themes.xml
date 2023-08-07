@@ -22,4 +22,31 @@
     <style name="Theme.Tasks.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Tasks.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- customização do botão da tela de Login -->
+    <style name="DefaultButton">
+        <item name="android:backgroundTint">@color/purple_200</item>
+        <item name="android:paddingStart">64dp</item>
+        <item name="android:paddingEnd">64dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <!-- customização da cor das letras, caixa de texto e ícones -->
+    <style name="EditTextWhite">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableTint">@color/white</item>
+    </style>
+
+    <!-- customização das barras de separação da tela de add nova tarefa -->
+    <style name="ViewDivider">
+        <item name="android:background">@color/grey_500</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
 </resources>
