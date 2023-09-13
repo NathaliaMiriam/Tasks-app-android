@@ -3,8 +3,7 @@
 ### 📄 Descrição:
 
 Aplicativo Android com Kotlin, composto por mais de 5 telas, que cria e gerencia tarefas. <br>
-As tarefas são criadas com uma descrição/título, recebem um grau de prioridade (Baixa, Média, Alta ou Crítica) e uma data limite, e podem ser marcadas como completas ou não. <br>
-<br>
+As tarefas são criadas com uma descrição/título, recebem um grau de prioridade (Baixa, Média, Alta ou Crítica) e uma data limite, e podem ser marcadas como completas ou não. <br><br>
 Foi desenvolvido com Android SDK, RecyclerView, Clean Architecture e Arq. MVVM, Room e Retrofit.
 
 ##
